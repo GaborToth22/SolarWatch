@@ -4,5 +4,5 @@ namespace SolarWatch.Service;
 
 public interface IJsonProcessorGeo
 {
-    City Process(string geoData);
+    Task<City> ProcessAsync(string geoData);
 }

@@ -5,7 +5,7 @@ namespace SolarWatch.Service;
 
 public class JsonProcessorGeo : IJsonProcessorGeo
 {
-    public City Process(string geoData)
+    public async Task<City> ProcessAsync(string geoData)
     {
         JsonDocument geoJson = JsonDocument.Parse(geoData);
         if (geoJson.RootElement.EnumerateArray().Any())
