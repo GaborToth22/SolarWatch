@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SolarWatch.Data;
 using SolarWatch.Repository;
 using SolarWatch.Service;
 
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<ISunDataProvider,SunDataProvider>();
 builder.Services.AddSingleton<IJsonProcessorGeo, JsonProcessorGeo>();
 builder.Services.AddSingleton<IJsonProcessorSun, JsonProcessorSun>();
 builder.Services.AddSingleton<ISolarWatchRepository, SolarWatchRepository>();
+builder.Services.AddDbContext<UsersContext>();
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
