@@ -1,9 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SolarWatch.Data;
 using SolarWatch.Repository;
 using SolarWatch.Service;
+using SolarWatch.Services.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ builder.Services.AddSingleton<IJsonProcessorGeo, JsonProcessorGeo>();
 builder.Services.AddSingleton<IJsonProcessorSun, JsonProcessorSun>();
 builder.Services.AddSingleton<ISolarWatchRepository, SolarWatchRepository>();
 builder.Services.AddDbContext<UsersContext>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -37,6 +40,19 @@ builder.Services
             ),
         };
     });
+
+builder.Services
+    .AddIdentityCore<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<UsersContext>();
     
 var app = builder.Build();
 
