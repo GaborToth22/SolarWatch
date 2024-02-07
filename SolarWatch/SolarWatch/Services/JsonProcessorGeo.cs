@@ -13,12 +13,18 @@ public class JsonProcessorGeo : IJsonProcessorGeo
             JsonElement cityName = geoJson.RootElement[0].GetProperty("name");
             JsonElement lat = geoJson.RootElement[0].GetProperty("lat");
             JsonElement lon = geoJson.RootElement[0].GetProperty("lon");
+            JsonElement country = geoJson.RootElement[0].GetProperty("country");
+            JsonElement state = geoJson.RootElement[0].GetProperty("state");
+            
 
             City city = new City
             {
                 Name = cityName.ToString(),
+                Country = country.ToString(),
+                State = state.ToString(),
                 Lat = lat.GetDouble(),
                 Lon = lon.GetDouble()
+                
             };
             return city;
         }
@@ -27,6 +33,8 @@ public class JsonProcessorGeo : IJsonProcessorGeo
             City city = new City
             {
                 Name = "Invalid City name",
+                Country = "Invalid City name",
+                State = "Invalid City name",
                 Lat = 0,
                 Lon = 0
             };

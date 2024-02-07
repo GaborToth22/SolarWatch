@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SolarWatch.Model;
+using SolarWatch.Repository;
 using SolarWatch.Service;
 
 namespace SolarWatch.Controllers;
@@ -14,26 +16,42 @@ public class SolarWatchForecastController : ControllerBase
     private ISunDataProvider _sunDataProvider;
     private IJsonProcessorSun _jsonProcessorSun;
     private IJsonProcessorGeo _jsonProcessorGeo;
+    private ISolarWatchRepository _solarWatchRepository;
 
-    public SolarWatchForecastController(ILogger<SolarWatchForecastController> logger, IGeoCoder geoCoder, ISunDataProvider sunDataProvider, IJsonProcessorSun jsonProcessorSun, IJsonProcessorGeo jsonProcessorGeo)
+    public SolarWatchForecastController(ILogger<SolarWatchForecastController> logger, IGeoCoder geoCoder, ISunDataProvider sunDataProvider,
+        IJsonProcessorSun jsonProcessorSun, IJsonProcessorGeo jsonProcessorGeo, ISolarWatchRepository solarWatchRepository)
     {
         _logger = logger;
         _geoCoder = geoCoder;
         _sunDataProvider = sunDataProvider;
         _jsonProcessorSun = jsonProcessorSun;
         _jsonProcessorGeo = jsonProcessorGeo;
+        _solarWatchRepository = solarWatchRepository;
     }
 
-    [HttpGet("SolarWatch")]
+    [HttpGet("SolarWatch")/*, Authorize*/]
     public async Task<IActionResult> GetData(string cityName, DateTime date)
     {
-        try
+        var city = _solarWatchRepository.GetCityByName(cityName);
+        if (city == null)
         {
             var geoData = await _geoCoder.GeoCodeAsync(cityName);
-            var city = await _jsonProcessorGeo.ProcessAsync(geoData);
+            city = await _jsonProcessorGeo.ProcessAsync(geoData);
+            _solarWatchRepository.Add(city);
+            
+        }
+        var solarWatchForecast = _solarWatchRepository.GetSolarWatchForecastByCityAndDate(city, date);
+        if (solarWatchForecast == null)
+        {
             var sunData = await _sunDataProvider.SunDataAsync(city, date);
+            solarWatchForecast = await _jsonProcessorSun.ProcessAsync(sunData, city, date);
+            _solarWatchRepository.Add(solarWatchForecast);
+        }
+        try
+        {
 
-            return Ok(_jsonProcessorSun.Process(sunData, city, date));
+            return Ok(solarWatchForecast);
+
         }
         catch (Exception e)
         {
