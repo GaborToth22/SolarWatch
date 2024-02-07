@@ -22,6 +22,7 @@ builder.Services.AddSingleton<IJsonProcessorSun, JsonProcessorSun>();
 builder.Services.AddSingleton<ISolarWatchRepository, SolarWatchRepository>();
 builder.Services.AddDbContext<UsersContext>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
