@@ -18,6 +18,7 @@ AddIdentity();
 
 var app = builder.Build();
 
+AddAdmin();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -155,11 +156,11 @@ async Task CreateAdminIfNotExists()
 {
     using var scope = app.Services.CreateScope();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    var adminInDb = await userManager.FindByEmailAsync("a@a.com");
+    var adminInDb = await userManager.FindByEmailAsync("admin@admin.com");
     if (adminInDb == null)
     {
-        var admin = new IdentityUser { UserName = "a", Email = "a@a.com" };
-        var adminCreated = await userManager.CreateAsync(admin, "aaa123");
+        var admin = new IdentityUser { UserName = "admin", Email = "admin@admin.com" };
+        var adminCreated = await userManager.CreateAsync(admin, "admin123");
 
         if (adminCreated.Succeeded)
         {
