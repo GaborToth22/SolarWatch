@@ -29,7 +29,7 @@ public class SolarWatchForecastController : ControllerBase
         _solarWatchRepository = solarWatchRepository;
     }
 
-    [HttpGet("SolarWatch")/*, Authorize*/]
+    [HttpGet("SolarWatch"), Authorize]
     public async Task<IActionResult> GetData(string cityName, DateTime date)
     {
         var city = _solarWatchRepository.GetCityByName(cityName);
