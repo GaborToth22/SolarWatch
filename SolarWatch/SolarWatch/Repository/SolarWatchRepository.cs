@@ -18,6 +18,12 @@ public class SolarWatchRepository : ISolarWatchRepository
         using var dbContext = new SolarWatchContext();
         return dbContext.Cities.FirstOrDefault(c => c.Name == name);
     }
+    
+    public City? GetCityById(int id)
+    {
+        using var dbContext = new SolarWatchContext();
+        return dbContext.Cities.FirstOrDefault(c => c.Id == id);
+    }
 
     public void Add(City city)
     {
@@ -50,6 +56,12 @@ public class SolarWatchRepository : ISolarWatchRepository
     {
         using var dbContext = new SolarWatchContext();
         return dbContext.SolarWatchForecasts.Include(s=>s.City).FirstOrDefault(s => s.City == city && s.Date == dateTime);
+    }
+
+    public SolarWatchForecast? GetSolarWatchForecastById(int id)
+    {
+        using var dbContext = new SolarWatchContext();
+        return dbContext.SolarWatchForecasts.FirstOrDefault(s => s.Id == id);
     }
 
     public void Add(SolarWatchForecast solarWatchForecast)
