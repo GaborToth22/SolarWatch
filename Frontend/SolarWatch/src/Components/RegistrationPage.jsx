@@ -1,0 +1,61 @@
+import { Link } from "react-router-dom";
+import { useState } from 'react';
+
+function RegistrationPage() {    
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [registrationMessage, setRegistrationMessage] = useState('');
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:5104/Auth/Register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    username,
+                    password,
+                }),
+            });
+
+            if (response.ok) {
+                console.log('Success registration!');  
+                setRegistrationMessage('Success registration!');              
+            } else {
+                console.error('Registration failed!');
+                setRegistrationMessage('Registration failed! Please try again.');                
+            }
+        } catch (error) {
+            console.error('An error occured during the:', error);
+        }
+    }
+    
+    return (
+        <div className="registration-popup">
+            <div className="registration-content">
+                <form onSubmit={handleSubmit}>
+                    <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
+                    <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} /><br />
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
+                    <button type="submit">Submit</button>
+                </form>
+                <div>{registrationMessage}</div>
+            </div>
+            <div className="cancel-button">
+                <Link to="/login">
+                    <button>Login</button>
+                </Link>
+                <Link to="/">
+                    <button>Home</button>
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+export default RegistrationPage;
