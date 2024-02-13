@@ -25,6 +25,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(corsPolicyBuilder =>
+{
+    corsPolicyBuilder
+        .WithOrigins("http://localhost:5173")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+
+});
+
 app.UseHttpsRedirection();
 
 AddRoles();
