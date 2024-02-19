@@ -7,7 +7,7 @@ using SolarWatch.Service;
 namespace SolarWatch.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/SolarWatch")]
 
 public class SolarWatchForecastController : ControllerBase
 {
@@ -29,7 +29,7 @@ public class SolarWatchForecastController : ControllerBase
         _solarWatchRepository = solarWatchRepository;
     }
 
-    [HttpGet("SolarWatch"), Authorize(Roles="User, Admin")]
+    [HttpGet(), Authorize(Roles="User, Admin")]
     public async Task<IActionResult> GetData(string cityName, DateTime date)
     {
         var city = _solarWatchRepository.GetCityByName(cityName);

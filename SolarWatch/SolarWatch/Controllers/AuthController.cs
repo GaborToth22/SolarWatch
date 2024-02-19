@@ -5,7 +5,7 @@ using SolarWatch.Services.Authentication;
 namespace SolarWatch.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authenticationService;

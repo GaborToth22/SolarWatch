@@ -15,7 +15,7 @@ function LoginPage() {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5104/Auth/Login', {
+            const response = await fetch('api/Auth/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,16 +42,7 @@ function LoginPage() {
             setLoginError('An error occurred during login. Please try again later.');
             console.error('An error occurred during login:', error);
         }
-    }
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            setTimeout(() => {
-                history.push('/'); // Átirányítás a főoldalra
-            }, 2000); // 2 másodperc várakozás
-        }
-    }, [isLoggedIn, history]);
-
+    }    
    
     return (
         <>
