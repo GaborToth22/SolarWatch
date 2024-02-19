@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,11 @@ public class UsersContext : IdentityDbContext<IdentityUser, IdentityRole, string
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlServer("Server=localhost,1433;Database=SolarWatch;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=true;"); //<- .env fájlba átrakni
+        var dotenv = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
+        Env.Load(dotenv);
+        options.UseSqlServer($"Server={Environment.GetEnvironmentVariable("DBHOST")},{Environment.GetEnvironmentVariable("DBPORT")};" +
+                             $"Database={Environment.GetEnvironmentVariable("DBNAME")};User Id={Environment.GetEnvironmentVariable("DBUSER")};" +
+                             $"Password={Environment.GetEnvironmentVariable("DBPASSWORD")};Encrypt=false;TrustServerCertificate=true;"); 
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

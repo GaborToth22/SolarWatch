@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SolarWatch.Model;
 
@@ -10,8 +11,12 @@ public class SolarWatchContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        var dotenv = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
+        Env.Load(dotenv);
         optionsBuilder.UseSqlServer(
-            "Server=localhost,1433;Database=SolarWatch;User Id=sa;Password=yourStrong(!)Password;Encrypt=false;");
+            $"Server={Environment.GetEnvironmentVariable("DBHOST")},{Environment.GetEnvironmentVariable("DBPORT")};" +
+            $"Database={Environment.GetEnvironmentVariable("DBNAME")};User Id={Environment.GetEnvironmentVariable("DBUSER")};" +
+            $"Password={Environment.GetEnvironmentVariable("DBPASSWORD")};Encrypt=false;TrustServerCertificate=true;"); 
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
