@@ -36,25 +36,25 @@ function RegistrationPage() {
     }
     
     return (
+        <div className="background-container">
         <div className="registration-popup">
-            <div className="registration-content">
-                <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
-                    <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} /><br />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
-                    <button type="submit">Submit</button>
-                </form>
-                <div>{registrationMessage}</div>
-            </div>
-            <div className="cancel-button">
-                <Link to="/login">
-                    <button>Login</button>
-                </Link>
-                <Link to="/">
-                    <button>Home</button>
-                </Link>
-            </div>
+            <div className="registration-content">                
+            <form onSubmit={handleSubmit}>
+                <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
+                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} /><br />
+                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
+                <button className="button" type="submit">Register</button>                
+            </form>
+            <div>{registrationMessage}</div>
+            <br />
+            <Link to="/login">
+                <button className="button">Login</button>
+            </Link>
+            
+            </div>         
         </div>
+        </div>
+        
     );
 }
 

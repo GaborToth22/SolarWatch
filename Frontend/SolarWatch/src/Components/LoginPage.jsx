@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import RegistrationPage from "./RegistrationPage";
 
-function LoginPage() {
+function LoginPage({ loggedUser, setLoggedUser }) {
     
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loginError, setLoginError] = useState(null);
     const navigate = useNavigate();
 
@@ -28,8 +25,8 @@ function LoginPage() {
 
             if (response.ok) {
                 const data = await response.json();
-                setIsLoggedIn(true);
-                setUsername(data.userName)
+                await setLoggedUser(data);
+                console.log(data)                
                 console.log('Login successful! Welcome, '+ data.userName);
                 setTimeout(() => {
                     navigate('/');
@@ -45,33 +42,30 @@ function LoginPage() {
     }    
    
     return (
-        <>
+        <div className="background-container">
             <div className="login-page">
-                {isLoggedIn ? (
-                    <p>Welcome, {username}</p>
+                {loggedUser ? (
+                    <p>Welcome, {loggedUser.userName}</p>
                 ) : (
                     <>
-                        <p>Please log in to access the full website.</p>
+                        <p>Please log in to access the SolarWatch.</p>
                         {loginError && <p>{loginError}</p>}
                         <div className="login-form">
                             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                            <button onClick={handleLoginSubmit}>Log in</button>
-                            <p>Not a member yet? 
-                                <Link to="/registration">
-                                    <span style={{ textDecoration: "underline", cursor: "pointer" }}>Click here to Register</span>
+                            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br></br>
+                            <button className="button" onClick={handleLoginSubmit}>Log in</button>      <br></br>                      
+                                <Link to="/registration" style={{ textDecoration: "underline", cursor: "pointer", color: "silver"  }}>
+                                    Click here to Register
                                 </Link>
-                            </p>
+                                <br />
+                            <div className="cancel-button">                                
+                            </div>
                         </div>
                     </>
                 )}
-                <div className="cancel-button">
-                    <Link to="/">
-                        <button>Home</button>
-                    </Link>
-                </div>
             </div>
-        </>
+            
+        </div>
     )
 }
 
